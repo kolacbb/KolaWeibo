@@ -13,6 +13,7 @@ import com.sina.weibo.sdk.exception.WeiboException;
 
 import io.github.kolacbb.kolaweibo.R;
 import io.github.kolacbb.kolaweibo.api.Constants;
+import io.github.kolacbb.kolaweibo.util.AccessTokenKeeper;
 
 public class WBAuthActivity extends AppCompatActivity {
 
@@ -46,7 +47,7 @@ public class WBAuthActivity extends AppCompatActivity {
             if (mAccessToken.isSessionValid()) {
 
                 // 保存 Token 到 SharedPreferences
-                AccessTokenKeeper.writeAccessToken(WBAuthActivity.this, mAccessToken);
+                AccessTokenKeeper.writeAccessToken(getApplicationContext(), mAccessToken);
                 Toast.makeText(WBAuthActivity.this,
                         "授权成功", Toast.LENGTH_SHORT).show();
             } else {

@@ -1,29 +1,43 @@
 package io.github.kolacbb.kolaweibo.api;
 
+import java.io.IOException;
+
+import io.github.kolacbb.kolaweibo.api.converter.CustomGsonConverterFactory;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Kola on 2016/9/17.
  */
-public class RetorfitFactory {
+public class RetrofitFactory {
 
     private static Retrofit mAuthRetrofit;
     private static Retrofit mWBRetrofit;
     private static Converter.Factory mConverterFactory;
 
     static {
-        mConverterFactory = GsonConverterFactory.create();
+        mConverterFactory = CustomGsonConverterFactory.create();
 
         mAuthRetrofit = new Retrofit.Builder()
-                .baseUrl("https://api.weibo.com/oauth2")
+                .baseUrl("https://api.weibo.com/oauth2/")
                 .addConverterFactory(mConverterFactory)
                 .build();
 
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build();
+
+
         mWBRetrofit = new Retrofit.Builder()
-                .baseUrl("https://api.weibo.com/2")
+                .baseUrl("https://api.weibo.com/2/")
                 .addConverterFactory(mConverterFactory)
+                .client(okHttpClient)
                 .build();
 
     }

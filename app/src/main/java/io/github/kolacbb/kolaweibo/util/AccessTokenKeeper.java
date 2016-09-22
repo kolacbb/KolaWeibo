@@ -1,4 +1,4 @@
-package io.github.kolacbb.kolaweibo.ui;
+package io.github.kolacbb.kolaweibo.util;
 
 /**
  * Created by Kola on 2016/9/17.
