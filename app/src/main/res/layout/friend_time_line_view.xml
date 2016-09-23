@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginEnd="8dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingStart="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingEnd="8dp"
     android:orientation="vertical">
 
     <include layout="@layout/time_line_user_bar" />

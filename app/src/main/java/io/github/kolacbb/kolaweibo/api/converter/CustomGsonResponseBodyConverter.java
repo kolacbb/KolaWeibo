@@ -2,10 +2,8 @@ package io.github.kolacbb.kolaweibo.api.converter;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
-import java.util.List;
 
 import io.github.kolacbb.kolaweibo.api.models.WBBaseBean;
 import okhttp3.ResponseBody;
