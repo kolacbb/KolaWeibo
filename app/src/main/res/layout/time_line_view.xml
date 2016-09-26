@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
     android:paddingStart="8dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
@@ -12,11 +12,11 @@
 
     <include layout="@layout/time_line_user_bar" />
 
-    <TextView
+    <io.github.kolacbb.kolaweibo.widget.WBTextView
         android:id="@+id/wb_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" 以上命令的含义：
+        android:text="//@Vczh 以上命令的含义：https://zhangd.com #中国#
    首先从远程的origin的master主分支下载最新的版本到origin/master分支上
    然后比较本地的master分支和origin/master分支的差别
    最后进行合并"

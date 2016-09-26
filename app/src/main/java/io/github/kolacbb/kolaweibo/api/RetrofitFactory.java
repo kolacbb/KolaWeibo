@@ -34,6 +34,9 @@ public class RetrofitFactory {
                 .build();
 
 
+        /**
+         * 若要添加其他converter 须将要添加的Converter放在Json converter 之前
+         * */
         mWBRetrofit = new Retrofit.Builder()
                 .baseUrl("https://api.weibo.com/2/")
                 .addConverterFactory(mConverterFactory)
