@@ -17,6 +17,8 @@ out/
 .gradle/
 build/
 
+.idea/
+
 # build.gradle
 *.gradle
 

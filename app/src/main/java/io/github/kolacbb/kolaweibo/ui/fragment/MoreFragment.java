@@ -13,12 +13,12 @@ import io.github.kolacbb.kolaweibo.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TimeLineFragment.OnFragmentInteractionListener} interface
+ * {@link MoreFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TimeLineFragment#newInstance} factory method to
+ * Use the {@link MoreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TimeLineFragment extends Fragment {
+public class MoreFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,7 +30,7 @@ public class TimeLineFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TimeLineFragment() {
+    public MoreFragment() {
         // Required empty public constructor
     }
 
@@ -40,11 +40,11 @@ public class TimeLineFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TimeLineFragment.
+     * @return A new instance of fragment MoreFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TimeLineFragment newInstance(String param1, String param2) {
-        TimeLineFragment fragment = new TimeLineFragment();
+    public static MoreFragment newInstance(String param1, String param2) {
+        MoreFragment fragment = new MoreFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,7 +65,7 @@ public class TimeLineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_time_line, container, false);
+        return inflater.inflate(R.layout.fragment_more, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
