@@ -1,5 +1,6 @@
 package io.github.kolacbb.kolaweibo.ui.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +25,51 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.ViewHo
     private static String COMMENTS_TEXT;
     private static String REPOSTS_TEXT;
 
-    public TimeLineAdapter(List<FriendTimeLine> timeLines) {
+    public TimeLineAdapter(@NonNull List<FriendTimeLine> timeLines) {
         mTimeLines = timeLines;
     }
 
-    public void setData(List<FriendTimeLine> timeLines) {
-        mTimeLines = timeLines;
+//    public void setData(List<FriendTimeLine> timeLines) {
+//        mTimeLines.addAll(timeLines);
+//    }
+
+    /**
+     * 删除指定数据
+     */
+    public void remove(FriendTimeLine timeLine) {
+        mTimeLines.remove(timeLine);
+    }
+
+    /**
+     * 在该队列之前添加数据
+     */
+    public void addToFront(List<FriendTimeLine> timeLines) {
+        mTimeLines.addAll(0, timeLines);
+    }
+
+    /**
+     * 在该队列之后添加数据
+     */
+    public void addToRear(List<FriendTimeLine> timeLines) {
+        mTimeLines.addAll(timeLines);
+    }
+
+    public long getFirstWBId() {
+        if (mTimeLines.size() > 0) {
+            return get(0).getId();
+        }
+        return 0;
+    }
+
+    public long getLastWBId() {
+        if (mTimeLines.size() > 0) {
+            return get(mTimeLines.size() - 1).getId();
+        }
+        return 0;
+    }
+
+    public FriendTimeLine get(int position) {
+        return mTimeLines.get(position);
     }
 
     @Override

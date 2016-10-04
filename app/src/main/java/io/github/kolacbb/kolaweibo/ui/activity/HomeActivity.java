@@ -27,7 +27,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
         mToken = AccessTokenKeeper.readAccessToken(getApplicationContext());
-        if (mToken.isSessionValid()) {
+        if (!mToken.isSessionValid()) {
             loadData(savedInstanceState);
         } else {
             AuthInfo mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
