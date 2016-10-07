@@ -1,5 +1,6 @@
 package io.github.kolacbb.kolaweibo.ui.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import io.github.kolacbb.kolaweibo.R;
 import io.github.kolacbb.kolaweibo.api.models.FriendTimeLine;
 import io.github.kolacbb.kolaweibo.api.models.User;
+import io.github.kolacbb.kolaweibo.util.CircleTransform;
 import io.github.kolacbb.kolaweibo.widget.WBTextView;
 
 /**
@@ -18,6 +22,8 @@ import io.github.kolacbb.kolaweibo.widget.WBTextView;
 
 public class FriendTimeLineAdapter extends BaseSwipeLoadingAdapter<FriendTimeLine>
         implements View.OnClickListener{
+    private Context mCtx;
+
     private static String ATTITUDES_TEXT;
     private static String COMMENTS_TEXT;
     private static String REPOSTS_TEXT;
@@ -30,14 +36,14 @@ public class FriendTimeLineAdapter extends BaseSwipeLoadingAdapter<FriendTimeLin
 
     @Override
     public RecyclerView.ViewHolder onCreateVH(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+        mCtx = parent.getContext();
+        View v = LayoutInflater.from(mCtx)
                 .inflate(R.layout.time_line_view, parent, false);
 
         // init string
-        ATTITUDES_TEXT = parent.getContext().getResources().getString(R.string.attitudes_text) + " ";
-        COMMENTS_TEXT = parent.getContext().getResources().getString(R.string.comments_text) + " ";
-        REPOSTS_TEXT = parent.getContext().getResources().getString(R.string.reposts_text);
-
+        ATTITUDES_TEXT = " " + mCtx.getResources().getString(R.string.attitudes_text) + " ";
+        COMMENTS_TEXT = " " + mCtx.getResources().getString(R.string.comments_text) + " ";
+        REPOSTS_TEXT = " " + mCtx.getResources().getString(R.string.reposts_text);
         return new TimeLineVH(v);
     }
 
@@ -45,8 +51,15 @@ public class FriendTimeLineAdapter extends BaseSwipeLoadingAdapter<FriendTimeLin
     public void onBindVH(RecyclerView.ViewHolder h, int position) {
         TimeLineVH holder = (TimeLineVH) h;
         FriendTimeLine t = get(position);
+
         // set user bar
         User user = t.getUser();
+        Picasso.with(mCtx)
+                .load(user.getAvatarLarge())
+                .resize(48, 48)
+                .transform(new CircleTransform())
+                .into(holder.userImg);
+
         holder.userName.setText(t.getUser().getName());
         //holder.wbCreateTime.setText(t.getCreatedAt());
         //holder.wbSource.setText(t.getSource());
@@ -55,15 +68,11 @@ public class FriendTimeLineAdapter extends BaseSwipeLoadingAdapter<FriendTimeLin
         holder.wbContent.setText(t.getText());
 
         // set time line status bar
-        String commentText = t.getCommentsCount() + COMMENTS_TEXT;
-        holder.commentsCount.setText(commentText);
-        String attitudeText = t.getAttitudesCount() + ATTITUDES_TEXT;
-        holder.attitudesCount.setText(attitudeText);
-        String repostsText = t.getRepostsCount() + REPOSTS_TEXT;
-        holder.repostsCount.setText(repostsText);
+        setTimeLineStatus(holder.commentsCount, t.getCommentsCount(), COMMENTS_TEXT);
+        setTimeLineStatus(holder.attitudesCount, t.getAttitudesCount(), ATTITUDES_TEXT);
+        setTimeLineStatus(holder.repostsCount, t.getRepostsCount(), REPOSTS_TEXT);
 
         // init listener
-
         holder.attitudesCount.setTag(position);
         holder.commentsCount.setTag(position);
         holder.repostsCount.setTag(position);
@@ -76,6 +85,19 @@ public class FriendTimeLineAdapter extends BaseSwipeLoadingAdapter<FriendTimeLin
         holder.userImg.setOnClickListener(this);
         holder.userName.setOnClickListener(this);
 
+    }
+
+    private void setTimeLineStatus(TextView tv, long count, String text) {
+        tv.setVisibility(View.VISIBLE);
+        if (count == 0) {
+            tv.setVisibility(View.GONE);
+        } else if (count < 1000) {
+            String str = count + text;
+            tv.setText(str);
+        } else {
+            String str = count / 1000 + "k" + text;
+            tv.setText(str);
+        }
     }
 
     @Override

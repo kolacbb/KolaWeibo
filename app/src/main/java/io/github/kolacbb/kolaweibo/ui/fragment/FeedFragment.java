@@ -17,6 +17,7 @@ import io.github.kolacbb.kolaweibo.api.RetrofitFactory;
 import io.github.kolacbb.kolaweibo.api.WBService;
 import io.github.kolacbb.kolaweibo.api.models.FriendTimeLine;
 import io.github.kolacbb.kolaweibo.ui.adapter.FriendTimeLineAdapter;
+import io.github.kolacbb.kolaweibo.util.AccessTokenKeeper;
 import io.github.kolacbb.kolaweibo.util.ToastUtils;
 import io.github.kolacbb.kolaweibo.widget.AutoRefreshRecyclerView;
 import retrofit2.Call;
@@ -65,7 +66,7 @@ public class FeedFragment extends BaseFragment
     private void loadData() {
         WBService api = RetrofitFactory.getWBRetrofit().create(WBService.class);
         long sinceId = mTimeLineAdapter.getFirstWBId();
-        Call<List<FriendTimeLine>> call = api.getFriendsTimeLine("2.00cAn7YFtRNyqC5cca9867310tLMa8", sinceId, null, null, null, null, null, null);
+        Call<List<FriendTimeLine>> call = api.getFriendsTimeLine(AccessTokenKeeper.readAccessToken(getActivity().getApplicationContext()).getToken(), sinceId, null, null, null, null, null, null);
         call.enqueue(new Callback<List<FriendTimeLine>>() {
             @Override
             public void onResponse(Call<List<FriendTimeLine>> call, Response<List<FriendTimeLine>> response) {
@@ -91,7 +92,7 @@ public class FeedFragment extends BaseFragment
     private void loadPreviousData() {
         WBService api = RetrofitFactory.getWBRetrofit().create(WBService.class);
         long lastId = mTimeLineAdapter.getLastWBId();
-        Call<List<FriendTimeLine>> call = api.getFriendsTimeLine("2.00cAn7YFtRNyqC5cca9867310tLMa8", null, lastId, 10, null, null, null, null);
+        Call<List<FriendTimeLine>> call = api.getFriendsTimeLine(AccessTokenKeeper.readAccessToken(getActivity().getApplicationContext()).getToken(), null, lastId, 10, null, null, null, null);
         call.enqueue(new Callback<List<FriendTimeLine>>() {
             @Override
             public void onResponse(Call<List<FriendTimeLine>> call, Response<List<FriendTimeLine>> response) {
