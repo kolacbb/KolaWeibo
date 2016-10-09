@@ -14,7 +14,6 @@
         android:id="@+id/tab_bar_container"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:background="@android:color/darker_gray"
         android:orientation="horizontal">

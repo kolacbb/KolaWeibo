@@ -1,7 +1,9 @@
 package io.github.kolacbb.kolaweibo.ui.activity;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -11,21 +13,40 @@ import com.sina.weibo.sdk.exception.WeiboException;
 
 import io.github.kolacbb.kolaweibo.R;
 import io.github.kolacbb.kolaweibo.api.Constants;
+import io.github.kolacbb.kolaweibo.ui.fragment.BaseFragment;
+import io.github.kolacbb.kolaweibo.ui.fragment.DiscoverFragment;
 import io.github.kolacbb.kolaweibo.ui.fragment.FeedFragment;
+import io.github.kolacbb.kolaweibo.ui.fragment.MessageFragment;
+import io.github.kolacbb.kolaweibo.ui.fragment.MoreFragment;
+import io.github.kolacbb.kolaweibo.ui.fragment.NotificationFragment;
 import io.github.kolacbb.kolaweibo.util.AccessTokenKeeper;
 import io.github.kolacbb.kolaweibo.util.ToastUtils;
 
 /**
  * Created by zhangd on 2016/9/20.
  */
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     Oauth2AccessToken mToken;
+
+    private View mFeedButton;
+    private View mDiscoverButton;
+    private View mNoticationButton;
+    private View mMessageButton;
+    private View mMoreButton;
+
+    private FeedFragment mFeedFragment;
+    private DiscoverFragment mDiscoverFragment;
+    private NotificationFragment mNotificationFragment;
+    private MessageFragment mMessageFragment;
+    private MoreFragment mMoreFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+        initView();
+
         mToken = AccessTokenKeeper.readAccessToken(getApplicationContext());
         if (mToken.isSessionValid()) {
             loadData(savedInstanceState);
@@ -36,29 +57,107 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void loadData(Bundle savedInstanceState) {
-        // Check that the activity is using the layout version with
-        // the fragment_container FrameLayout
-        if (findViewById(R.id.fragment_container) != null) {
+    private void initView() {
+        // init view
+        mFeedButton = findViewById(R.id.tab_bar_feed);
+        mDiscoverButton = findViewById(R.id.tab_bar_discover);
+        mNoticationButton = findViewById(R.id.tab_bar_notification);
+        mMessageButton = findViewById(R.id.tab_bar_message);
+        mMoreButton = findViewById(R.id.tab_bar_more);
 
-            // However, if we're being restored from a previous state,
-            // then we don't need to do anything and should return or else
-            // we could end up with overlapping fragments.
-            if (savedInstanceState != null) {
-                return;
+        mFeedButton.setOnClickListener(this);
+        mDiscoverButton.setOnClickListener(this);
+        mNoticationButton.setOnClickListener(this);
+        mMessageButton.setOnClickListener(this);
+        mMoreButton.setOnClickListener(this);
+
+
+    }
+
+    private void loadData(Bundle savedInstanceState) {
+
+        if (savedInstanceState != null) {
+            return;
+        }
+
+//        mFeedFragment = new FeedFragment();
+//        mDiscoverFragment = new DiscoverFragment();
+//        mNotificationFragment = new NotificationFragment();
+//        mMessageFragment = new MessageFragment();
+//        mMoreFragment = new MoreFragment();
+
+
+        mFeedFragment = new FeedFragment();
+
+        mFeedFragment.setArguments(getIntent().getExtras());
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, mFeedFragment, FeedFragment.TAG)
+                //.addToBackStack(null)
+                .commit();
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tab_bar_feed:
+                showFragment(FeedFragment.TAG);
+                break;
+            case R.id.tab_bar_discover:
+                showFragment(DiscoverFragment.TAG);
+                break;
+            case R.id.tab_bar_notification:
+
+                break;
+            case R.id.tab_bar_message:
+
+                break;
+            case R.id.tab_bar_more:
+
+                break;
+        }
+    }
+
+    public void showFragment(String tag) {
+        BaseFragment baseFragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        if (baseFragment != null && baseFragment.isVisible()) {
+            return;
+        }
+
+        android.support.v4.app.FragmentTransaction transaction =
+                getSupportFragmentManager().beginTransaction();
+
+        // 隐藏其他Fragment
+        if (mFeedFragment != null && mFeedFragment.isVisible()) {
+            transaction.hide(mFeedFragment);
+        }
+
+        if (mDiscoverFragment != null && mDiscoverFragment.isVisible()) {
+            transaction.hide(mDiscoverFragment);
+        }
+
+        if (tag.equals(FeedFragment.TAG)) {
+            if (baseFragment == null) {
+                mFeedFragment = new FeedFragment();
+                baseFragment = mFeedFragment;
             }
 
-            // Create a new Fragment to be placed in the activity layout
-            FeedFragment firstFragment = new FeedFragment();
-
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments(getIntent().getExtras());
-
-            // Add the fragment to the 'fragment_container' FrameLayout
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, firstFragment).commitAllowingStateLoss();
+        } else if (tag.equals(DiscoverFragment.TAG)) {
+            if (baseFragment == null) {
+                mDiscoverFragment = new DiscoverFragment();
+                baseFragment = mDiscoverFragment;
+            }
         }
+
+        // 添加Fragment 到事物
+        if (baseFragment.isAdded()) {
+            transaction.show(baseFragment);
+        } else {
+            transaction.add(R.id.fragment_container, baseFragment, tag).commit();
+        }
+
+
     }
 
     /**

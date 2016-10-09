@@ -3,9 +3,7 @@ package io.github.kolacbb.kolaweibo.ui.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,14 +28,19 @@ public class FeedFragment extends BaseFragment
         FriendTimeLineAdapter.OnRepostClickListener,
         FriendTimeLineAdapter.OnLikeClickListener{
 
+    public static final String TAG = FeedFragment.class.getSimpleName();
+
     private AutoRefreshRecyclerView mAutoRecView;
     private FriendTimeLineAdapter mTimeLineAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_feed, container, false);
-        mAutoRecView = (AutoRefreshRecyclerView) v.findViewById(R.id.auto_refresh_recycler_view);
+    protected int getLayoutId() {
+        return R.layout.fragment_feed;
+    }
+
+    @Override
+    protected void afterCreate(Bundle savedInstanceState) {
+        mAutoRecView = (AutoRefreshRecyclerView) mRootView.findViewById(R.id.auto_refresh_recycler_view);
         mTimeLineAdapter = new FriendTimeLineAdapter();
         mAutoRecView.setAdapter(mTimeLineAdapter);
         //mAutoRecView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
@@ -60,7 +63,6 @@ public class FeedFragment extends BaseFragment
         mTimeLineAdapter.setLikeClickListener(this);
         mTimeLineAdapter.setRepostClickListener(this);
         mTimeLineAdapter.setUserClickListener(this);
-        return v;
     }
 
     private void loadData() {
