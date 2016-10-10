@@ -13,45 +13,50 @@
     <LinearLayout
         android:id="@+id/tab_bar_container"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:background="@android:color/darker_gray"
         android:orientation="horizontal">
 
         <ImageView
+            android:layout_gravity="center"
             android:id="@+id/tab_bar_feed"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_bottomtabbar_feed" />
+            android:src="@drawable/ic_receipt_black_24px" />
 
         <ImageView
+            android:layout_gravity="center"
             android:id="@+id/tab_bar_discover"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_bottomtabbar_discover" />
+            android:src="@drawable/ic_explore_black_24px" />
 
         <ImageView
+            android:layout_gravity="center"
             android:id="@+id/tab_bar_notification"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_bottomtabbar_notification" />
+            android:src="@drawable/ic_notifications_black_24px" />
 
         <ImageView
+            android:layout_gravity="center"
             android:id="@+id/tab_bar_message"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="24dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_bottomtabbar_message" />
+            android:src="@drawable/ic_textsms_black_36px" />
 
         <ImageView
+            android:layout_gravity="center"
             android:id="@+id/tab_bar_more"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/ic_bottomtabbar_more" />
+            android:src="@drawable/ic_more_black_24px" />
 
     </LinearLayout>
 </RelativeLayout>

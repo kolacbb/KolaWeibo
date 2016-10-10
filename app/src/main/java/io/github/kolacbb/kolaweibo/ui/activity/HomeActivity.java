@@ -1,8 +1,8 @@
 package io.github.kolacbb.kolaweibo.ui.activity;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.sina.weibo.sdk.auth.AuthInfo;
@@ -27,11 +27,13 @@ import io.github.kolacbb.kolaweibo.util.ToastUtils;
  */
 public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
+    private String TAG = HomeActivity.class.getSimpleName();
+
     Oauth2AccessToken mToken;
 
     private View mFeedButton;
     private View mDiscoverButton;
-    private View mNoticationButton;
+    private View mNotificationButton;
     private View mMessageButton;
     private View mMoreButton;
 
@@ -61,13 +63,13 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         // init view
         mFeedButton = findViewById(R.id.tab_bar_feed);
         mDiscoverButton = findViewById(R.id.tab_bar_discover);
-        mNoticationButton = findViewById(R.id.tab_bar_notification);
+        mNotificationButton = findViewById(R.id.tab_bar_notification);
         mMessageButton = findViewById(R.id.tab_bar_message);
         mMoreButton = findViewById(R.id.tab_bar_more);
 
         mFeedButton.setOnClickListener(this);
         mDiscoverButton.setOnClickListener(this);
-        mNoticationButton.setOnClickListener(this);
+        mNotificationButton.setOnClickListener(this);
         mMessageButton.setOnClickListener(this);
         mMoreButton.setOnClickListener(this);
 
@@ -120,41 +122,55 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void showFragment(String tag) {
+        Log.e(TAG, "showFragment: tag is " + tag);
+        // 从事务中获取指定tag的fragment
         BaseFragment baseFragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag);
+
+        // 若是该fragment已经为当前页面，则返回
         if (baseFragment != null && baseFragment.isVisible()) {
             return;
         }
 
+        // 开启事务
         android.support.v4.app.FragmentTransaction transaction =
                 getSupportFragmentManager().beginTransaction();
 
         // 隐藏其他Fragment
         if (mFeedFragment != null && mFeedFragment.isVisible()) {
-            transaction.hide(mFeedFragment);
+            getSupportFragmentManager().beginTransaction().hide(mFeedFragment).commit();
+            //transaction.hide(mFeedFragment);
+            Log.e(TAG, "showFragment: feed fragment is hide");
         }
 
         if (mDiscoverFragment != null && mDiscoverFragment.isVisible()) {
-            transaction.hide(mDiscoverFragment);
+            getSupportFragmentManager().beginTransaction().hide(mDiscoverFragment).commit();
+            //transaction.hide(mDiscoverFragment);
+            Log.e(TAG, "showFragment: discover fragment is hide");
         }
 
         if (tag.equals(FeedFragment.TAG)) {
             if (baseFragment == null) {
                 mFeedFragment = new FeedFragment();
                 baseFragment = mFeedFragment;
+                Log.e(TAG, "showFragment: new base fragment");
             }
 
         } else if (tag.equals(DiscoverFragment.TAG)) {
             if (baseFragment == null) {
                 mDiscoverFragment = new DiscoverFragment();
                 baseFragment = mDiscoverFragment;
+                Log.e(TAG, "showFragment: new discover fragment");
             }
         }
 
         // 添加Fragment 到事物
         if (baseFragment.isAdded()) {
-            transaction.show(baseFragment);
+            transaction.show(baseFragment).commit();
+
+            Log.e(TAG, "showFragment: base fragment is show");
         } else {
             transaction.add(R.id.fragment_container, baseFragment, tag).commit();
+            Log.e(TAG, "showFragment: base fragment is added");
         }
 
 
