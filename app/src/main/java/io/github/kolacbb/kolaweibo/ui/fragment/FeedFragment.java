@@ -2,8 +2,10 @@ package io.github.kolacbb.kolaweibo.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +16,7 @@ import io.github.kolacbb.kolaweibo.R;
 import io.github.kolacbb.kolaweibo.api.RetrofitFactory;
 import io.github.kolacbb.kolaweibo.api.WBService;
 import io.github.kolacbb.kolaweibo.api.models.FriendTimeLine;
+import io.github.kolacbb.kolaweibo.ui.activity.HomeActivity;
 import io.github.kolacbb.kolaweibo.ui.adapter.FriendTimeLineAdapter;
 import io.github.kolacbb.kolaweibo.util.AccessTokenKeeper;
 import io.github.kolacbb.kolaweibo.util.ToastUtils;
@@ -32,6 +35,8 @@ public class FeedFragment extends BaseFragment
 
     private AutoRefreshRecyclerView mAutoRecView;
     private FriendTimeLineAdapter mTimeLineAdapter;
+
+    private int mTouchSlop;
 
     @Override
     protected int getLayoutId() {
@@ -59,6 +64,16 @@ public class FeedFragment extends BaseFragment
                 loadPreviousData();
             }
         });
+        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+
+        mAutoRecView.getRecyclerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                ((HomeActivity) getActivity()).showBottomNavigation(dy < 0);
+            }
+        });
+
         mTimeLineAdapter.setCommentClickListener(this);
         mTimeLineAdapter.setLikeClickListener(this);
         mTimeLineAdapter.setRepostClickListener(this);

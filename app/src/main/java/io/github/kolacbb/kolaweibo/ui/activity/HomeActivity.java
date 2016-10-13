@@ -36,6 +36,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private View mNotificationButton;
     private View mMessageButton;
     private View mMoreButton;
+    private View mBottomNavigation;
 
     private FeedFragment mFeedFragment;
     private DiscoverFragment mDiscoverFragment;
@@ -61,6 +62,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
 
     private void initView() {
         // init view
+        mBottomNavigation = findViewById(R.id.bottom_navigation);
         mFeedButton = findViewById(R.id.tab_bar_feed);
         mDiscoverButton = findViewById(R.id.tab_bar_discover);
         mNotificationButton = findViewById(R.id.tab_bar_notification);
@@ -174,6 +176,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         }
 
 
+    }
+
+    public void showBottomNavigation(boolean show) {
+        if (show) {
+            mBottomNavigation.setVisibility(View.VISIBLE);
+        } else {
+            mBottomNavigation.setVisibility(View.GONE);
+        }
     }
 
     /**
