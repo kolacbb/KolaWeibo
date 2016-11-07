@@ -1,6 +1,7 @@
 package io.github.kolacbb.kolaweibo.ui.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,22 +22,18 @@ import io.github.kolacbb.kolaweibo.ui.fragment.MoreFragment;
 import io.github.kolacbb.kolaweibo.ui.fragment.NotificationFragment;
 import io.github.kolacbb.kolaweibo.util.AccessTokenKeeper;
 import io.github.kolacbb.kolaweibo.util.ToastUtils;
+import io.github.kolacbb.kolaweibo.widget.BottomNavigationView;
 
 /**
  * Created by zhangd on 2016/9/20.
  */
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
+public class HomeActivity extends AppCompatActivity {
 
     private String TAG = HomeActivity.class.getSimpleName();
 
     Oauth2AccessToken mToken;
 
-    private View mFeedButton;
-    private View mDiscoverButton;
-    private View mNotificationButton;
-    private View mMessageButton;
-    private View mMoreButton;
-    private View mBottomNavigation;
+    private BottomNavigationView mBottomNavigation;
 
     private FeedFragment mFeedFragment;
     private DiscoverFragment mDiscoverFragment;
@@ -44,14 +41,15 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     private MessageFragment mMessageFragment;
     private MoreFragment mMoreFragment;
 
+    private BaseFragment mOldFragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
         initView();
-
         mToken = AccessTokenKeeper.readAccessToken(getApplicationContext());
         if (mToken.isSessionValid()) {
+            Log.e(TAG, "token: " + mToken.getToken());
             loadData(savedInstanceState);
         } else {
             AuthInfo mAuthInfo = new AuthInfo(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
@@ -61,21 +59,34 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void initView() {
-        // init view
-        mBottomNavigation = findViewById(R.id.bottom_navigation);
-        mFeedButton = findViewById(R.id.tab_bar_feed);
-        mDiscoverButton = findViewById(R.id.tab_bar_discover);
-        mNotificationButton = findViewById(R.id.tab_bar_notification);
-        mMessageButton = findViewById(R.id.tab_bar_message);
-        mMoreButton = findViewById(R.id.tab_bar_more);
 
-        mFeedButton.setOnClickListener(this);
-        mDiscoverButton.setOnClickListener(this);
-        mNotificationButton.setOnClickListener(this);
-        mMessageButton.setOnClickListener(this);
-        mMoreButton.setOnClickListener(this);
+        mBottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation_view);
+        mBottomNavigation.setOnButtonClickListener(new BottomNavigationView.OnButtonClickListener() {
+            @Override
+            public void onFeedClicked(View v) {
+                showFragment(FeedFragment.TAG);
+            }
 
+            @Override
+            public void onDiscoverClicked(View v) {
+                showFragment(DiscoverFragment.TAG);
+            }
 
+            @Override
+            public void onNotificationClicked(View v) {
+                showFragment(NotificationFragment.TAG);
+            }
+
+            @Override
+            public void onMessageClicked(View v) {
+                showFragment(MessageFragment.TAG);
+            }
+
+            @Override
+            public void onMoreClicked(View v) {
+                showFragment(MoreFragment.TAG);
+            }
+        });
     }
 
     private void loadData(Bundle savedInstanceState) {
@@ -83,48 +94,10 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         if (savedInstanceState != null) {
             return;
         }
-
-//        mFeedFragment = new FeedFragment();
-//        mDiscoverFragment = new DiscoverFragment();
-//        mNotificationFragment = new NotificationFragment();
-//        mMessageFragment = new MessageFragment();
-//        mMoreFragment = new MoreFragment();
-
-
-        mFeedFragment = new FeedFragment();
-
-        mFeedFragment.setArguments(getIntent().getExtras());
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, mFeedFragment, FeedFragment.TAG)
-                //.addToBackStack(null)
-                .commit();
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tab_bar_feed:
-                showFragment(FeedFragment.TAG);
-                break;
-            case R.id.tab_bar_discover:
-                showFragment(DiscoverFragment.TAG);
-                break;
-            case R.id.tab_bar_notification:
-
-                break;
-            case R.id.tab_bar_message:
-
-                break;
-            case R.id.tab_bar_more:
-
-                break;
-        }
+        showFragment(FeedFragment.TAG);
     }
 
     public void showFragment(String tag) {
-        Log.e(TAG, "showFragment: tag is " + tag);
         // 从事务中获取指定tag的fragment
         BaseFragment baseFragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag);
 
@@ -138,51 +111,59 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
                 getSupportFragmentManager().beginTransaction();
 
         // 隐藏其他Fragment
-        if (mFeedFragment != null && mFeedFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().hide(mFeedFragment).commit();
+        if (mOldFragment != null && mOldFragment.isVisible()) {
+            getSupportFragmentManager().beginTransaction().hide(mOldFragment).commit();
             //transaction.hide(mFeedFragment);
-            Log.e(TAG, "showFragment: feed fragment is hide");
-        }
-
-        if (mDiscoverFragment != null && mDiscoverFragment.isVisible()) {
-            getSupportFragmentManager().beginTransaction().hide(mDiscoverFragment).commit();
-            //transaction.hide(mDiscoverFragment);
-            Log.e(TAG, "showFragment: discover fragment is hide");
+            Log.e(TAG, "showFragment: old fragment is hide");
         }
 
         if (tag.equals(FeedFragment.TAG)) {
             if (baseFragment == null) {
-                mFeedFragment = new FeedFragment();
-                baseFragment = mFeedFragment;
-                Log.e(TAG, "showFragment: new base fragment");
+                baseFragment = new FeedFragment();
+                Log.e(TAG, "showFragment: new feed fragment");
             }
-
         } else if (tag.equals(DiscoverFragment.TAG)) {
             if (baseFragment == null) {
-                mDiscoverFragment = new DiscoverFragment();
-                baseFragment = mDiscoverFragment;
+                baseFragment = new DiscoverFragment();
                 Log.e(TAG, "showFragment: new discover fragment");
+            }
+        } else if (tag.equals(NotificationFragment.TAG)) {
+            if (baseFragment == null) {
+                baseFragment = new NotificationFragment();
+                Log.e(TAG, "showFragment: new notification fragment");
+            }
+        } else if (tag.equals(MessageFragment.TAG)) {
+            if (baseFragment == null) {
+                baseFragment = new MessageFragment();
+                Log.e(TAG, "showFragment: new message fragment");
+            }
+        } else if (tag.equals(MoreFragment.TAG)) {
+            if (baseFragment == null) {
+                baseFragment = new MoreFragment();
+                Log.e(TAG, "showFragment: new more fragment");
             }
         }
 
         // 添加Fragment 到事物
-        if (baseFragment.isAdded()) {
-            transaction.show(baseFragment).commit();
-
-            Log.e(TAG, "showFragment: base fragment is show");
-        } else {
-            transaction.add(R.id.fragment_container, baseFragment, tag).commit();
-            Log.e(TAG, "showFragment: base fragment is added");
+        if (baseFragment == null) {
+            return;
         }
 
-
+        if (baseFragment.isAdded()) {
+            transaction.show(baseFragment).commit();
+            Log.e(TAG, "showFragment: base fragment is show");
+        } else {
+            transaction.add(R.id.fragment_container, baseFragment, tag).commitAllowingStateLoss();
+            Log.e(TAG, "showFragment: base fragment is added");
+        }
+        mOldFragment = baseFragment;
     }
 
     public void showBottomNavigation(boolean show) {
         if (show) {
-            mBottomNavigation.setVisibility(View.VISIBLE);
+            mBottomNavigation.show();
         } else {
-            mBottomNavigation.setVisibility(View.GONE);
+            mBottomNavigation.dismiss();
         }
     }
 

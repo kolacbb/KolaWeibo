@@ -53,7 +53,7 @@ public class FriendTimeLine implements Serializable {
     private String inReplyToScreenName;
     @SerializedName("pic_urls")
     @Expose
-    private List<Object> picUrls = new ArrayList<Object>();
+    private List<Pic_urls> picUrls = new ArrayList<Pic_urls>();
     @SerializedName("geo")
     @Expose
     private Object geo;
@@ -351,7 +351,7 @@ public class FriendTimeLine implements Serializable {
      * @return
      *     The picUrls
      */
-    public List<Object> getPicUrls() {
+    public List<Pic_urls> getPicUrls() {
         return picUrls;
     }
 
@@ -360,7 +360,7 @@ public class FriendTimeLine implements Serializable {
      * @param picUrls
      *     The pic_urls
      */
-    public void setPicUrls(List<Object> picUrls) {
+    public void setPicUrls(List<Pic_urls> picUrls) {
         this.picUrls = picUrls;
     }
 

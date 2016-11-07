@@ -5,6 +5,7 @@ import android.os.Bundle;
 import io.github.kolacbb.kolaweibo.R;
 
 public class MoreFragment extends BaseFragment {
+    public static final String TAG = MoreFragment.class.getSimpleName();
 
     @Override
     protected int getLayoutId() {

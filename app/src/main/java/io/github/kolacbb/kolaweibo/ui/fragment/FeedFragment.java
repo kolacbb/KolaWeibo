@@ -1,8 +1,11 @@
 package io.github.kolacbb.kolaweibo.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -33,6 +36,7 @@ public class FeedFragment extends BaseFragment
 
     public static final String TAG = FeedFragment.class.getSimpleName();
 
+    private Toolbar mToolBar;
     private AutoRefreshRecyclerView mAutoRecView;
     private FriendTimeLineAdapter mTimeLineAdapter;
 
@@ -45,6 +49,11 @@ public class FeedFragment extends BaseFragment
 
     @Override
     protected void afterCreate(Bundle savedInstanceState) {
+        mToolBar = (Toolbar) mRootView.findViewById(R.id.toolbar);
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(mToolBar);
+        //ActionBar actionBar = activity.getSupportActionBar();
+
         mAutoRecView = (AutoRefreshRecyclerView) mRootView.findViewById(R.id.auto_refresh_recycler_view);
         mTimeLineAdapter = new FriendTimeLineAdapter();
         mAutoRecView.setAdapter(mTimeLineAdapter);
@@ -70,7 +79,9 @@ public class FeedFragment extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                ((HomeActivity) getActivity()).showBottomNavigation(dy < 0);
+                if (Math.abs(dy) >= mTouchSlop) {
+                    ((HomeActivity) getActivity()).showBottomNavigation(dy < 0);
+                }
             }
         });
 

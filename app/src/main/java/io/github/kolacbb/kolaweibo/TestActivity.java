@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.kolacbb.kolaweibo.widget.KRecyclerView;
+import io.github.kolacbb.kolaweibo.widget.WBImagesView;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -21,49 +22,67 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
+//
+//        mRecView = (KRecyclerView) findViewById(R.id.recycler_view);
+//        mAdapter = new TimeLineAdapter<String>();
+//        mRecView.setAdapter(mAdapter);
+//        mRecView.setLoadingEnable(true);
+//        //mAdapter.remove("aa");
+//
+//        mRecView.setOnRefreshListener(new KRecyclerView.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                mRecView.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        List<String> list = new ArrayList<String>();
+//                        for (int i = 0; i < 35; i++) {
+//                            list.add(i + "");
+//                        }
+//                        mAdapter.addToFront(list);
+//                        mAdapter.notifyDataSetChanged();
+//                        mRecView.setRefreshing(false);
+//                    }
+//                }, 500);
+//
+//
+//            }
+//        });
+//
+//        mRecView.setOnLoadingListener(new KRecyclerView.OnLoadingListener() {
+//            @Override
+//            public void onLoading() {
+//                mRecView.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        List<String> list = new ArrayList<String>();
+//                        for (int i = 100; i < 105; i++) {
+//                            list.add(i + "la");
+//                        }
+//                        mAdapter.addToRear(list);
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+//                }, 500);
+//            }
+//        });
 
-        mRecView = (KRecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new TimeLineAdapter<String>();
-        mRecView.setAdapter(mAdapter);
-        mRecView.setLoadingEnable(true);
-        //mAdapter.remove("aa");
+        imagesView = (WBImagesView) findViewById(R.id.wb_images);
+        for (int i = 0; i < 10; i++) {
+            list.add(new String[i]);
+        }
+    }
 
-        mRecView.setOnRefreshListener(new KRecyclerView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mRecView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<String> list = new ArrayList<String>();
-                        for (int i = 0; i < 35; i++) {
-                            list.add(i + "");
-                        }
-                        mAdapter.addToFront(list);
-                        mAdapter.notifyDataSetChanged();
-                        mRecView.setRefreshing(false);
-                    }
-                }, 500);
+    WBImagesView imagesView;
+    List<String[]> list = new ArrayList<>();
+    int i = 0;
 
+    public void onButtonClicked(View view) {
 
-            }
-        });
-
-        mRecView.setOnLoadingListener(new KRecyclerView.OnLoadingListener() {
-            @Override
-            public void onLoading() {
-                mRecView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        List<String> list = new ArrayList<String>();
-                        for (int i = 100; i < 105; i++) {
-                            list.add(i + "la");
-                        }
-                        mAdapter.addToRear(list);
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }, 500);
-            }
-        });
+        imagesView.setImages(this, list.get(i));
+        i++;
+        if (i >= 10) {
+            i = 0;
+        }
     }
 
     class TimeLineAdapter<String> extends KRecyclerView.Adapter<String> {
