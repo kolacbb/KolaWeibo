@@ -17,11 +17,6 @@ out/
 .gradle/
 build/
 
-.idea/
-
-# build.gradle
-*.gradle
-
 # Local configuration file (sdk path, etc)
 local.properties
 
@@ -43,3 +38,9 @@ captures/
 
 # Keystore files
 *.jks
+
+.idea/
+app/build/
+gradle/
+
+*.iml
