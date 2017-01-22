@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">KolaWeibo</string>
+
+    <string name="attitudes_text">赞同 · </string>
+    <string name="comments_text">评论 · </string>
+    <string name="reposts_text">转发</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

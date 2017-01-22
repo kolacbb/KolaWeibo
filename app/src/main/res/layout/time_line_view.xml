@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:layout_marginTop="4dp"
+    android:background="@drawable/bg_rectangle_ripple"
+    android:clickable="true"
+    android:elevation="2dp"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingEnd="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="8dp">
+
+    <include layout="@layout/time_line_user_bar" />
+
+    <io.github.kolacbb.kolaweibo.widget.WBTextView
+        android:id="@+id/wb_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="//@Vczh 以上命令的含义：https://zhangd.com #中国#
+   首先从远程的origin的master主分支下载最新的版本到origin/master分支上
+   然后比较本地的master分支和origin/master分支的差别
+   最后进行合并"
+        android:textColor="@color/textBlack" />
+
+    <io.github.kolacbb.kolaweibo.widget.WBImagesView
+        android:id="@+id/wb_images"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+
+    </io.github.kolacbb.kolaweibo.widget.WBImagesView>
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/wb_repost"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--android:visibility="gone">-->
+
+        <!--<io.github.kolacbb.kolaweibo.widget.WBTextView-->
+            <!--android:id="@+id/wb_repost_content"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<io.github.kolacbb.kolaweibo.widget.WBImagesView-->
+            <!--android:id="@+id/wb_repost_images"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+    <!--</LinearLayout>-->
+
+    <include layout="@layout/time_line_status_bar" />
+</LinearLayout>
